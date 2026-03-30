@@ -4,6 +4,9 @@ import cors from 'cors'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 
+console.log('[startup] ANTHROPIC_API_KEY set:', !!process.env.ANTHROPIC_API_KEY)
+console.log('[startup] SUPABASE_URL set:', !!process.env.SUPABASE_URL)
+
 import chatRouter from './routes/chat'
 import conversationsRouter from './routes/conversations'
 import usageRouter from './routes/usage'

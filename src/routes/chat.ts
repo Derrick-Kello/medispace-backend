@@ -40,6 +40,7 @@ const router = Router()
  *   data: [DONE]
  */
 router.post('/', optionalAuth, async (req: Request, res: Response) => {
+  console.log('[chat] request received', req.body)
   const { message, conversationId, topic } = req.body as {
     message?: string
     conversationId?: string
@@ -121,6 +122,7 @@ router.post('/', optionalAuth, async (req: Request, res: Response) => {
 
   // ── Stream or JSON response ───────────────────────────────────────────────
   const wantsStream = req.headers.accept?.includes('text/event-stream')
+  console.log('[chat] wantsStream:', wantsStream, '| message:', userMessage, '| tier:', tier)
 
   if (wantsStream) {
     res.setHeader('Content-Type', 'text/event-stream')
@@ -155,6 +157,7 @@ router.post('/', optionalAuth, async (req: Request, res: Response) => {
       res.write('data: [DONE]\n\n')
       res.end()
     } catch (err) {
+      console.error('[chat stream error]', err)
       sendEvent({ type: 'error', message: 'AI response failed' })
       res.end()
     }

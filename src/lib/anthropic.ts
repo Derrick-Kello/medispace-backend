@@ -125,7 +125,7 @@ export async function chat(
   ]
 
   const response = await anthropic.messages.create({
-    model: 'claude-sonnet-4-6',
+    model: 'claude-sonnet-4-5',
     max_tokens: 1024,
     system: systemPrompt,
     messages,
@@ -154,22 +154,25 @@ export async function chatStream(
   let fullText = ''
 
   const stream = anthropic.messages.stream({
-    model: 'claude-sonnet-4-6',
+    model: 'claude-sonnet-4-5',
     max_tokens: 1024,
     system: systemPrompt,
     messages,
   })
 
   for await (const event of stream) {
+    console.log('[stream event]', event.type)
     if (
       event.type === 'content_block_delta' &&
       event.delta.type === 'text_delta'
     ) {
       const chunk = event.delta.text
+      console.log('[chunk]', chunk)
       fullText += chunk
       onDelta(chunk)
     }
   }
 
+  console.log('[stream done] fullText length:', fullText.length)
   return fullText
 }
